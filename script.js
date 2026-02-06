@@ -1,92 +1,109 @@
-// 1. Dinamik Online Foydalanuvchilar (Realistik tebranish)
-function updateOnlineStats() {
-    const countElement = document.getElementById('online-count');
-    if (!countElement) return;
+/**
+ * 1. TELEFON RAQAMI UCHUN SMART MASKA
+ * Foydalanuvchi faqat raqam yozadi, qolganini JS bajaradi
+ */
+const phoneInput = document.getElementById('phone');
 
-    let current = parseInt(countElement.innerText);
-    // Tasodifiy: 2 ta odam chiqib ketadi yoki 3 ta kiradi
-    let change = Math.floor(Math.random() * 6) - 2; 
+phoneInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, ''); // Faqat raqamlarni qoldiramiz
     
-    let newCount = current + change;
-    
-    // Me'yorni saqlash (masalan, 100 dan kamayib ketmasin)
-    if (newCount < 100) newCount = 105;
-    if (newCount > 500) newCount = 450;
+    // Agar foydalanuvchi 998 bilan boshlamasa, avtomatik qo'shish
+    if (!value.startsWith('998') && value.length > 0) {
+        value = '998' + value;
+    }
 
-    countElement.innerText = newCount;
+    let result = '';
+    if (value.length > 0) result += '+998';
+    if (value.length > 3) result += ' (' + value.substring(3, 5);
+    if (value.length > 5) result += ') ' + value.substring(5, 8);
+    if (value.length > 8) result += '-' + value.substring(8, 10);
+    if (value.length > 10) result += '-' + value.substring(10, 12);
+
+    e.target.value = result;
+});
+
+// Klaviaturada o'chirishni (backspace) to'g'ri ishlashi uchun
+phoneInput.addEventListener('keydown', (e) => {
+    if (e.keyCode === 8 && phoneInput.value.length <= 5) {
+        e.preventDefault(); // +998 qismini o'chirib tashlamaslik uchun
+    }
+});
+
+/**
+ * 2. ONLINE STATISTIKA (DINAMIK)
+ */
+function updateLiveUsers() {
+    const el = document.getElementById('online-users');
+    let current = parseInt(el.innerText) || 154;
+    
+    // Tasodifiy son: -2 va +3 oralig'ida
+    let change = Math.floor(Math.random() * 6) - 2;
+    let finalCount = current + change;
+
+    // Me'yordan chiqib ketmaslik (masalan 120 va 300 orasida saqlash)
+    if (finalCount < 120) finalCount = 135;
+    if (finalCount > 300) finalCount = 280;
+
+    el.innerText = finalCount + " kishi onlayn";
 }
-setInterval(updateOnlineStats, 3000); // Har 3 soniyada o'zgaradi
+setInterval(updateLiveUsers, 3500);
 
-// 2. Fake Xabarnomalar (Toast) - Haqiqiyroq ko'rinishi uchun
-const names = ["Abbos", "Sardor", "Lola", "Jasur", "Madina", "Shaxzod", "Bekzod"];
-const cities = ["Toshkent", "Samarqand", "Buxoro", "Andijon", "Namangan"];
-const actions = ["kursga yozildi", "ro'yxatdan o'tdi", "buyurtma berdi", "bonus oldi"];
+/**
+ * 3. FAKE BILDIRISHNOMALAR (TOASTS)
+ */
+const fakeData = {
+    names: ["Sherzod", "Aziza", "Doniyor", "Madina", "Alisher", "Sardor", "Nigora"],
+    actions: ["yangi arizasini qoldirdi", "ro'yxatdan o'tdi", "konsultatsiya oldi", "guruhga qo'shildi"]
+};
 
 function createToast() {
     const container = document.getElementById('toast-container');
-    if (!container) return;
-
-    const name = names[Math.floor(Math.random() * names.length)];
-    const city = cities[Math.floor(Math.random() * cities.length)];
-    const action = actions[Math.floor(Math.random() * actions.length)];
-
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.style.cssText = `
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
-        padding: 12px 20px;
-        border-radius: 12px;
-        margin-top: 10px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        border-left: 5px solid #23d5ab;
-        color: #333;
-        font-size: 14px;
-        transition: 0.5s;
-    `;
 
-    toast.innerHTML = `📍 <b>${city}</b>: ${name} hozirgina ${action} 🔥`;
+    const randomName = fakeData.names[Math.floor(Math.random() * fakeData.names.length)];
+    const randomAction = fakeData.actions[Math.floor(Math.random() * fakeData.actions.length)];
+
+    toast.innerHTML = `🔔 <b>${randomName}</b> ${randomAction}`;
     container.appendChild(toast);
 
-    // 4 soniyadan keyin yo'qolishi
+    // Animatsiya bilan yo'qotish
     setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transform = 'translateX(-20px)';
-        setTimeout(() => toast.remove(), 500);
+        toast.style.transform = 'translateY(-20px)';
+        setTimeout(() => toast.remove(), 600);
     }, 4000);
 }
-// Har 12 soniyada kimdir nimadir qiladi
-setInterval(createToast, 12000);
+// Har 12-15 soniyada bitta bildirishnoma chiqarish
+setInterval(createToast, Math.random() * (15000 - 12000) + 12000);
 
-// 3. Fake Forma Yuborish (Interaktiv)
-function submitForm() {
-    const btn = document.getElementById('submit-btn');
+/**
+ * 4. FORMANI "YUBORISH" VA LOADER
+ */
+function sendData() {
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+    const btn = document.getElementById('main-btn');
     const loader = document.getElementById('loader');
-    const msg = document.getElementById('success-msg');
-    const input = document.getElementById('name');
 
-    if (input.value.length < 3) {
-        alert("Iltimos, ismingizni to'liq yozing!");
+    // Validatsiya
+    if (nameInput.value.trim().length < 3) {
+        alert("Iltimos, ismingizni kiriting");
+        return;
+    }
+    if (phoneInput.value.length < 19) {
+        alert("Telefon raqamingizni to'liq kiriting");
         return;
     }
 
-    // Tugmani yashirish va loader chiqarish
-    btn.style.display = "none";
-    input.style.opacity = "0.5";
-    input.disabled = true;
-    loader.style.display = "block";
+    // Jarayon boshlandi
+    btn.style.display = 'none';
+    loader.style.display = 'block';
 
-    // 3 soniyalik "ishlov berish" jarayoni
+    // 2.5 soniyadan keyin "Muvaffaqiyatli" oynasini ko'rsatish
     setTimeout(() => {
-        loader.style.display = "none";
-        msg.style.display = "block";
-        msg.style.animation = "fadeIn 1s forwards";
-        
-        // Ismga qarab maxsus rahmatnoma (shaxsiylashtirish)
-        msg.innerHTML = `✨ Rahmat, <b>${input.value}</b>! So'rovingiz qabul qilindi.`;
-    }, 3000);
+        document.getElementById('form-container').style.display = 'none';
+        document.getElementById('success-view').style.display = 'block';
+        document.getElementById('thanks-name').innerText = `Rahmat, ${nameInput.value.split(' ')[0]}!`;
+    }, 2500);
 }
-
-// 4. Kichik "Easter Egg": Foydalanuvchi sahifadan boshqa tabga o'tsa sarlavha o'zgaradi
-window.onblur = function () { document.title = "Qayerga ketdingiz? 😢"; }
-window.onfocus = function () { document.title = "Jonli Statik Sayt"; }

@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mobile Live App</title>
+    <title>Startap | Ro'yxatdan o'tish</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* 1. ASOSIY DIZAYN VA GRADIENT FON */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
-            -webkit-tap-highlight-color: transparent; /* Mobil teginganda ko'k ramkani yo'qotadi */
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: linear-gradient(-45deg, #12c2e9, #c471ed, #f64f59);
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e);
             background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
+            animation: gradientBG 15s ease infinite;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Mobil ekranda skroll bo'lmasligi uchun */
             padding: 20px;
+            color: white;
+            overflow: hidden;
         }
 
         @keyframes gradientBG {
@@ -35,191 +35,230 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* 2. GLASSMORPHISM CARD (TELEFONGA MOSLANGAN) */
+        /* Glassmorphism Card */
         .glass-card {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            padding: 30px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 35px 25px;
             width: 100%;
-            max-width: 400px; /* Telefon uchun ideal kenglik */
+            max-width: 380px;
             text-align: center;
-            color: white;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        /* 3. ELEMENTLAR USLUBI */
-        .status-dot {
-            height: 8px;
-            width: 8px;
-            background: #00ff00;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 5px;
-            box-shadow: 0 0 10px #00ff00;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink { 50% { opacity: 0.3; } }
-
-        h1 { font-size: 24px; margin-bottom: 10px; }
-        p { font-size: 14px; opacity: 0.9; margin-bottom: 20px; }
-
-        .counter-box {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(0, 255, 128, 0.1);
+            padding: 5px 12px;
             border-radius: 20px;
+            font-size: 11px;
+            color: #00ff80;
             margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 128, 0.3);
         }
 
-        .counter-number { font-size: 32px; font-weight: 600; display: block; }
-        .counter-text { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .dot {
+            height: 6px;
+            width: 6px;
+            background: #00ff80;
+            border-radius: 50%;
+            margin-right: 7px;
+            animation: pulse 1.5s infinite;
+        }
 
-        /* INPUT VA TUGMA */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 128, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 128, 0); }
+        }
+
+        h2 { margin-bottom: 10px; font-weight: 600; font-size: 22px; }
+        p { font-size: 13px; opacity: 0.8; margin-bottom: 25px; line-height: 1.5; }
+
+        /* Inputlar */
+        .input-group { margin-bottom: 15px; text-align: left; }
+        
+        label { font-size: 11px; text-transform: uppercase; margin-left: 10px; opacity: 0.7; }
+
         input {
             width: 100%;
-            padding: 15px;
+            padding: 14px 18px;
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
             color: white;
-            margin-bottom: 15px;
             outline: none;
-            font-size: 16px; /* Mobil brauzer avto-zoom qilmasligi uchun kamida 16px */
+            font-size: 16px;
+            transition: 0.3s;
+            margin-top: 5px;
         }
-        input::placeholder { color: rgba(255, 255, 255, 0.7); }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
 
         button {
             width: 100%;
             padding: 15px;
             border-radius: 15px;
             border: none;
-            background: white;
-            color: #f64f59;
+            background: #00ff80;
+            color: #121212;
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
+            margin-top: 10px;
             transition: 0.3s;
         }
-        button:active { transform: scale(0.95); } /* Bosilganda effekt */
 
-        /* TOAST XABARNOMALAR (PASTDA) */
+        button:active { transform: scale(0.97); }
+
+        /* Toast Notifications */
         #toast-container {
             position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 25px;
             width: 90%;
-            max-width: 350px;
-            z-index: 1000;
+            max-width: 340px;
+            z-index: 999;
         }
 
         .toast {
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            padding: 12px 15px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #121212;
+            padding: 12px 18px;
+            border-radius: 15px;
             margin-top: 10px;
             font-size: 13px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            animation: slideUp 0.5s ease-out;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
+            animation: slideUp 0.4s ease-out;
         }
 
         @keyframes slideUp {
-            from { transform: translateY(100px); opacity: 0; }
+            from { transform: translateY(50px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* LOADER */
+        /* Loader */
         .loader {
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
             display: none;
+            border: 3px solid rgba(255,255,255,0.2);
+            border-top: 3px solid #00ff80;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            animation: spin 0.8s linear infinite;
+            margin: 15px auto;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
 
     <div class="glass-card">
-        <div style="font-size: 12px; margin-bottom: 15px;">
-            <span class="status-dot"></span> Jonli platforma
+        <div class="status-badge">
+            <span class="dot"></span> <span id="online-users">154 kishi onlayn</span>
         </div>
         
-        <h1>Salom! 👋</h1>
-        <p>G'oyalarni real loyihalarga aylantiramiz. Bugun qo'shiling!</p>
+        <h2>Loyihaga qo'shiling</h2>
+        <p>Ma'lumotlaringizni qoldiring, biz siz bilan tez orada bog'lanamiz.</p>
 
-        <div class="counter-box">
-            <span class="counter-number" id="online-count">247</span>
-            <span class="counter-text">Hozir onlayn</span>
-        </div>
+        <div id="form-container">
+            <div class="input-group">
+                <label>Ism-sharif</label>
+                <input type="text" id="name" placeholder="Masalan: Sherzod Ali">
+            </div>
 
-        <div id="form-content">
-            <input type="text" id="user-name" placeholder="Ismingizni kiriting...">
-            <button onclick="handleJoin()">Hoziroq qo'shilish</button>
+            <div class="input-group">
+                <label>Telefon raqam</label>
+                <input type="tel" id="phone" placeholder="+998 (__) ___-__-__">
+            </div>
+
+            <button onclick="sendData()" id="main-btn">Ro'yxatdan o'tish</button>
             <div id="loader" class="loader"></div>
         </div>
 
-        <div id="success-msg" style="display: none; font-size: 14px; margin-top: 15px;">
-            ✅ Rahmat! Tez orada bog'lanamiz.
+        <div id="success-view" style="display: none;">
+            <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
+            <h3 id="thanks-name">Rahmat!</h3>
+            <p>Ma'lumotlaringiz muvaffaqiyatli yuborildi. Operatorlarimiz qo'ng'irog'ini kuting.</p>
         </div>
     </div>
 
     <div id="toast-container"></div>
 
     <script>
-        // 1. ONLINE COUNT TEBRANISHI
+        // 1. Telefon raqam maskasi
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, ''); // Faqat raqamlarni qoldirish
+            if (value.startsWith('998')) value = value.substring(3); // 998 ni vaqtincha olib tashlash
+            
+            let masked = '+998 ';
+            if (value.length > 0) masked += '(' + value.substring(0, 2);
+            if (value.length > 2) masked += ') ' + value.substring(2, 5);
+            if (value.length > 5) masked += '-' + value.substring(5, 7);
+            if (value.length > 7) masked += '-' + value.substring(7, 9);
+            
+            e.target.value = masked;
+        });
+
+        // 2. Online foydalanuvchilar soni (jonli o'zgarish)
         setInterval(() => {
-            const el = document.getElementById('online-count');
-            let count = parseInt(el.innerText);
-            el.innerText = count + (Math.floor(Math.random() * 5) - 2);
-        }, 3000);
+            const el = document.getElementById('online-users');
+            let current = parseInt(el.innerText);
+            let change = Math.floor(Math.random() * 5) - 2;
+            el.innerText = (current + change) + " kishi onlayn";
+        }, 4000);
 
-        // 2. FAKE TOASTLAR (MOBIL UCHUN)
-        const people = ["Ali", "Bekzod", "Madina", "Sardor", "Jasur", "Guli"];
-        const texts = ["ro'yxatdan o'tdi", "fikr qoldirdi", "kursni boshladi"];
+        // 3. Fake Toastlar
+        const names = ["Azizbek", "Malika", "Doston", "Jasur", "Gulasal", "Ibrohim"];
+        const actions = ["hozirgina qo'shildi", "so'rov qoldirdi", "ro'yxatdan o'tdi"];
 
-        function showToast() {
+        function showNotification() {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
             
-            const randomPerson = people[Math.floor(Math.random() * people.length)];
-            const randomText = texts[Math.floor(Math.random() * texts.length)];
+            const n = names[Math.floor(Math.random() * names.length)];
+            const a = actions[Math.floor(Math.random() * actions.length)];
             
-            toast.innerHTML = `⭐ <b>${randomPerson}</b> hozirgina ${randomText}`;
+            toast.innerHTML = `🚀 <b>${n}</b> ${a}`;
             container.appendChild(toast);
 
             setTimeout(() => {
                 toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
                 setTimeout(() => toast.remove(), 500);
             }, 3000);
         }
-        setInterval(showToast, 8000);
+        setInterval(showNotification, 10000);
 
-        // 3. TUGMA BOSILGANDA
-        function handleJoin() {
-            const name = document.getElementById('user-name').value;
-            if(name.length < 3) return alert("Ismingizni yozing");
+        // 4. Ma'lumotni "yuborish"
+        function sendData() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
 
-            document.getElementById('user-name').style.display = 'none';
-            document.querySelector('button').style.display = 'none';
+            if (name.length < 3 || phone.length < 19) {
+                alert("Iltimos, barcha maydonlarni to'ldiring!");
+                return;
+            }
+
+            document.getElementById('main-btn').style.display = 'none';
             document.getElementById('loader').style.display = 'block';
 
+            // Fake server kutish vaqti
             setTimeout(() => {
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('success-msg').style.display = 'block';
-                document.getElementById('success-msg').innerHTML = `✨ Rahmat <b>${name}</b>, muvaffaqiyatli bajarildi!`;
+                document.getElementById('form-container').style.display = 'none';
+                document.getElementById('success-view').style.display = 'block';
+                document.getElementById('thanks-name').innerText = `Rahmat, ${name}!`;
             }, 2500);
         }
     </script>
